@@ -74,7 +74,7 @@ this case the action would look like this:
 ```
 
 `redux-easy-models` supports defining actions with sync and async functions, and
-chaining multiple actions very simple.
+chaining multiple actions.
 
 ## Usage
 
