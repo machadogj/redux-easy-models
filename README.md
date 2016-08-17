@@ -159,4 +159,4 @@ const HomeContainer = connect(
 export default HomeContainer;
 ```
 Actions wills be generated as usual:
-![redux-actions-sample](https://cloud.githubusercontent.com/assets/671212/17738723/e10f2e90-6468-11e6-9c27-6244c54c4f5a.png)
+<img src="https://cloud.githubusercontent.com/assets/671212/17738723/e10f2e90-6468-11e6-9c27-6244c54c4f5a.png" width="250">
