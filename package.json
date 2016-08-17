@@ -1,8 +1,8 @@
 {
   "name": "redux-easy-models",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Easily create models using standard redux architecture.",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "clean": "rimraf lib",
     "build": "npm run clean && babel src --out-dir lib --ignore *.specs.js",
@@ -10,7 +10,8 @@
     "prepublish": "npm run test && npm run build"
   },
   "files": [
-    "lib"
+    "lib",
+    "src"
   ],
   "keywords": [
     "flux",
