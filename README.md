@@ -11,6 +11,71 @@ Easily define your models using standard redux libraries (redux, redux-actions, 
 npm install --save redux-easy-models
 ```
 
+## Rationale
+
+In a plain vanilla redux implementation with the help of some helper libraries
+like `redux-actions` and `redux-thunk` you might end up with something like this:
+
+**actions/timer.js**
+```js
+const start = createAction("TIMER_START")
+//... more action creators here.
+export default { start };
+```
+
+**reducers/timer.js**
+```js
+import { start } from '../actions/timer';
+const startReducer = handleAction(start, {
+  next(state, action) {...},
+  throw(state, action) {...}
+});
+```
+
+Later in you containers or components you'd have to dispatch actions like this:
+
+```js
+import { start } from '../actions/timer';
+//...
+dispatch(start());
+```
+
+While this decouples the code and keeps things simple, the amount of boilerplate
+and disconnection between actions and reducers can feel painful at times. With
+`redux-easy-models` you could achieve the same with the following code:
+
+**models/timer.js**
+```js
+export default new ReduxModel({
+  name: timer,
+  actions: [ 'start' ],
+  reducers: {
+    start: (state, action) => ...
+  }
+});
+```
+
+Notice how all the code for the "timer" model is in a single file. When you want
+to dispatch your actions, all you have to do is:
+
+```js
+import model = '../model/timer';
+//...
+model.api.start();
+```
+
+This will automatically dispatch standard actions with standar action types. In
+this case the action would look like this:
+
+```
+{
+  type: "TIMER_START"
+}
+```
+
+`redux-easy-models` supports defining actions with sync and async functions, and
+chaining multiple actions very simple.
+
 ## Usage
 
 ```js
@@ -47,11 +112,11 @@ const timer = {
     // one in case of success or failure.
     // action types will follow an upper snake convention with
     // the name as the prefix, ie:
-    //   function startMySuperTimer() {...
+    //   function doSomething() {...
     // will be translated to an action type of:
-    //   TIMER_START_MY_SUPER_TIMER_START
-    //   TIMER_START_MY_SUPER_TIMER_SUCCESS
-    //   TIMER_START_MY_SUPER_TIMER_FAIL
+    //   TIMER_DO_SOMETHING_START
+    //   TIMER_DO_SOMETHING_SUCCESS
+    //   TIMER_DO_SOMETHING_FAIL
     function start() {
       this.clear();
       return setInterval(this.increase, 1000);
