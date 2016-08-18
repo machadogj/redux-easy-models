@@ -76,6 +76,10 @@ this case the action would look like this:
 `redux-easy-models` supports defining actions with sync and async functions, and
 chaining multiple actions.
 
+## Demo
+
+For a working demo you can go [here](https://machadogj.github.io/redux-easy-models-sample/).
+
 ## Usage
 
 ```js
