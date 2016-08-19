@@ -230,3 +230,52 @@ export default HomeContainer;
 Actions wills be generated as usual:
 
 <img src="https://cloud.githubusercontent.com/assets/671212/17738723/e10f2e90-6468-11e6-9c27-6244c54c4f5a.png" width="250">
+
+## Helpers
+
+There are two helper methods in case you have more than one model in your application.
+
+### combineModelReducers & initModels
+
+You can arrange your models in an array or an object:
+
+```js
+import user from './user';
+import entries from './entries';
+import comments from './comments';
+
+export {
+  user,
+  entries,
+  comments,
+};
+
+// could be export [ user, entries, comments]
+```
+
+```js
+import { createStore, applyMiddleware } from 'redux';
+import createLogger from 'redux-logger';
+import thunkMiddleware from 'redux-thunk';
+
+// import the new helper functions
+import { combineModelReducers, initModels } from 'redux-easy-models'
+
+//models
+import * as models from './models';
+
+// combine all of the ReduxModel reducers
+const reducers = combineModelReducers(models);
+
+const logger = createLogger();
+const store = createStore(
+    reducers,
+    applyMiddleware(...[thunkMiddleware, logger])
+);
+
+// init all the ReduxModels
+initModels(models, store);
+```
+
+## Credits
+Thanks to [Dan](https://github.com/dhrrgn) for his contributions of helper methods!

@@ -1,6 +1,6 @@
 {
   "name": "redux-easy-models",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Easily create models using standard redux architecture.",
   "main": "lib/index.js",
   "scripts": {

@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { createAction } from 'redux-actions';
-import { snakeCase, camelCase, endsWith } from 'lodash';
+import { snakeCase, camelCase, endsWith, isArray, isObjectLike, values } from 'lodash';
 
 export default class Model {
 
@@ -81,6 +81,11 @@ export default class Model {
 
   fromActionTypeToReducerName = (actionType) => camelCase(actionType.substring(this.prefix.length));
 
+  /**
+   * Initialize the model with the containing store.
+   *
+   * @param {object} store - a redux store
+   */
   init(store) {
     this.dispatch = store.dispatch;
     this.api.getState = store.getState;
@@ -95,9 +100,9 @@ export default class Model {
  * @return {function} A combined redux reducer
  */
 export function combineModelReducers(models) {
-  let reducers = {};
+  const reducers = {};
 
-  _iterateModels(models, (model) => {
+  _getValidModels(models).forEach(model => {
     reducers[model.name] = model.reducer;
   });
 
@@ -111,35 +116,20 @@ export function combineModelReducers(models) {
  * @param {object} store - A redux store.
  */
 export function initModels(models, store) {
-  _iterateModels(models, (model) => {
-    model.init(store);
-  });
+  _getValidModels(models).forEach(model => model.init(store));
 }
 
 /**
- * Iterate over an array or object containing Model objects. Non-Model objects
- * are skipped silently.
+ * Return Model objects.
  *
  * @param {(array|object)} models - An array or object containing Model objects.
- * @param {function} cb - The function to invoke with each Model object.
  */
-function _iterateModels(models, cb) {
-  if (models instanceof Array) {
-    models.forEach((model) => {
-      if (typeof model === 'object' && model.constructor.name === 'Model') {
-        cb(model);
-      }
-    });
-  } else if (typeof models === 'object') {
-    for (let key in models) {
-      if (models.hasOwnProperty(key)) {
-        let model = models[key];
-        if (typeof model === 'object' && model.constructor.name === 'Model') {
-          cb(model);
-        }
-      }
-    }
-  } else {
-    throw new TypeError("Parameter 'models' must be an array or object, not " + (typeof models));
+function _getValidModels(models) {
+
+  if (!isArray(models) && !isObjectLike(models)) {
+    throw new TypeError(`Parameter 'models' must be an array or object, not ${(typeof models)}`);
   }
+
+  return (isArray(models) ? models : values(models))
+    .filter(model => isObjectLike(model) && model.constructor.name === 'Model');
 }
